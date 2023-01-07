@@ -19,3 +19,12 @@ sequential mod : start task 1 , task 2  ... finish
 concurrency mod : start task 1 , wait , task 2 , wait , task 1 , wait , task 2 finish conccunrently
 parallel mod : start task 1 and task 2 in seperated cores and finish them , finish
 
+Consider a CPU with four cores that is supposed to perform tasks for us. Each core has a series of threads that are inside the core and in fact it is a queue where the tasks inside are placed to be done.
+For each task, the operating system puts a goroutine in the tasks and puts these goroutines in the threads.
+  Sometimes Golang may put several small goroutines inside a thread.
+The larger the size of this goroutine, that is, the bigger and heavier the task, the number of goroutines inside the kernel will decrease.
+calling goroutines in golang : go + function
+
+Guroutines have a limited life cycle. They are called, they are used, and they disappear after doing their work.
+  Even the smallest programs are executed with a guillotine, for example, the main goroutine contains the main function.
+  In the case that we do not use concurrency, we are actually using one core, one thread and one goroutine.
