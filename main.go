@@ -8,29 +8,40 @@ import (
 	"sync"
 )
 
+type Counter struct {
+	sync.Mutex
+	Value int
+}
+
 func main() {
 	fmt.Println("start")
 	var wg sync.WaitGroup
 
-	myTestInt := 0
+	counter := Counter{}
 
 	for i := 0; i < 1000; i++ {
 		wg.Add(1)
 		// pass pointer to function
-		go incerement(&myTestInt, &wg)
+		go incerement(&counter, &wg)
 	}
 
 	wg.Wait()
+	fmt.Println("value:", counter.Value)
 	fmt.Println("End")
 }
 
 // recieve a pointer by type wg
 // it need to be passed in main function
 // pi = poniter int
-func incerement(pi *int, wg *sync.WaitGroup) {
+func incerement(counter *Counter, wg *sync.WaitGroup) {
+	counter.Lock()
+	// give value
+	i := counter.Value
 	// pass pi to an int
-	i := *pi
-	fmt.Println("value", i)
-	*pi = i + 1
+
+	counter.Value = i + 1
+
 	wg.Done()
+	// finish processing
+	counter.Unlock()
 }
